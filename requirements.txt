@@ -1,0 +1,8 @@
+Django==4.2.3
+djangorestframework==3.14.0
+python-dotenv==1.0.0
+django-modeltranslation==0.18.11
+drf-spectacular==0.26.4
+Pillow==10.0.0
+django-taggit==4.0.0
+psycopg2-binary==2.9.6
