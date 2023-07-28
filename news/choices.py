@@ -16,6 +16,7 @@ class Regions(TextChoices):
     JIZZAKH = 'jizzakh', _("Jizzakh")
     SIRDARYA = 'sirdarya', _("Sirdarya")
     NAVOI = 'navoi', _("Navoi")
+    OTHER = 'other', _("Other")
 
 
 class Categories(TextChoices):

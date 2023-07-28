@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from rest_framework.response import Response
 from rest_framework import generics, permissions
 from .models import TextNewsModel, AudioNewsModel
-from .serializers import TextNewsSerializer, AudioNewsSerializer
+from .serializers import (
+    TextNewsSerializer, TextNewsPostSerializer, 
+    AudioNewsSerializer, AudioNewsPostSerializer
+)
 from .permissions import IsOwnerOrReadOnly
 
 class TextNewsList(generics.ListAPIView):
@@ -12,22 +15,32 @@ class TextNewsList(generics.ListAPIView):
 
 class TextNewsCreate(generics.CreateAPIView):
     queryset = TextNewsModel.objects.all()
-    serializer_class = TextNewsSerializer
+    serializer_class = TextNewsPostSerializer
     permission_classes = (permissions.IsAuthenticated, )
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
         return super().perform_create(serializer)
     
+
 class TextNewsRetrieve(generics.RetrieveAPIView):
     queryset = TextNewsModel.objects.all()
     serializer_class = TextNewsSerializer
     permission_classes = (permissions.IsAuthenticated, )
 
+    def retrieve(self, request, pk):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+
+        instance.view_count += 1
+        instance.save()
+
+        return Response(serializer.data)
+
 
 class TextNewsUpdate(generics.UpdateAPIView):
     queryset = TextNewsModel.objects.all()
-    serializer_class = TextNewsSerializer
+    serializer_class = TextNewsPostSerializer
     permission_clases = (
         permissions.IsAuthenticated,
         IsOwnerOrReadOnly
@@ -69,7 +82,7 @@ class AudioNewsList(generics.ListAPIView):
 
 class AudioNewsCreate(generics.CreateAPIView):
     queryset = AudioNewsModel.objects.all()
-    serializer_class = AudioNewsSerializer
+    serializer_class = AudioNewsPostSerializer
     permission_classes = (permissions.IsAuthenticated, )
 
     def perform_create(self, serializer):
@@ -82,10 +95,19 @@ class AudioNewsRetrieve(generics.RetrieveAPIView):
     serializer_class = AudioNewsSerializer
     permission_classes = (permissions.IsAuthenticated, )
 
+    def retrieve(self, request, pk):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+
+        instance.view_count += 1
+        instance.save()
+
+        return Response(serializer.data)
+
 
 class AudioNewsUpdate(generics.UpdateAPIView):
     queryset = AudioNewsModel.objects.all()
-    serializer_class = AudioNewsSerializer
+    serializer_class = AudioNewsPostSerializer
     permission_clases = (
         permissions.IsAuthenticated,
         IsOwnerOrReadOnly

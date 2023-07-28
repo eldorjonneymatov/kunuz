@@ -26,13 +26,15 @@ class TextNewsModel(NewsBaseModel):
         _("Category"), 
         max_length=14, 
         choices=Categories.choices,
-        db_index=True
+        db_index=True,
+        default=Categories.UZBEKISTAN,
     )
     region = models.CharField(
         _("Region"), 
         max_length=14, 
         choices=Regions.choices,
-        db_index=True
+        db_index=True,
+        default=Regions.OTHER,
     )
     cover_img  = models.ImageField(_("Cover photo"), upload_to='cover_imgs/')
     body = models.TextField(_("Body"))
